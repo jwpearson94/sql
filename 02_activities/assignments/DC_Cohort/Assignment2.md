@@ -56,7 +56,42 @@ The store wants to keep customer addresses. Propose two architectures for the CU
 **HINT:** search type 1 vs type 2 slowly changing dimensions. 
 
 ```
-Your answer...
+In a type 1 architecture we would just overwrite the old value. In this context we aren't interested in tracking history and the table would always show the latest value only.
+
+A possible layout for such as table would be:
+
+Customer_Address
+_______________
+customer_id (PK)
+street
+city
+province_state
+postal_code
+country
+last_updated
+
+Here the customers table would have a one to one relationship with customer_address, as customer_id corresponds to one individual and one address.
+
+In a type 2 architecture, we do the opposite, and we create a new row instead of writing. This enables us to preserve history. This could be beneficial for data analysis as we would have a more clear historical record.
+
+A table layout to achieve this could look like:
+
+Customer_Address
+_______________
+customer_id
+street
+city
+province_state
+postal_code
+country
+start_date
+end_date
+is_current [True or False]
+
+In this table, customer_id + start_date would combine to form the primary key for the table.
+
+Here the customers table now has a one to many relationship with customer_address table, as one customer_id could have several unique addresses. 
+
 ```
 
 ***
@@ -191,5 +226,11 @@ Consider, for example, concepts of labour, bias, LLM proliferation, moderating c
 
 
 ```
-Your thoughts...
+A key ethical issue raised in this article is the hidden role of human labour in supposedly “automated” AI systems. Much of the data used to train neural networks is labeled by low-paid workers, often through platforms like crowdwork services. This creates concerns about exploitation, lack of recognition, and poor working conditions, especially since this labour is essential but largely invisible to end users.
+
+Another major issue is bias. Because training data is created and categorized by humans, it inevitably reflects social, cultural, and historical biases. These biases can then be amplified by AI systems, leading to unfair or discriminatory outcomes in areas like image recognition or language processing.
+
+The proliferation of large language models also raises concerns about scale. As AI systems become more widespread, their embedded biases and errors can affect larger populations. This makes accountability more difficult, especially when the systems appear autonomous but are actually built on layers of human decision-making.
+
+Content moderation is another ethical challenge. Filtering harmful or inappropriate content often relies on human reviewers who are exposed to disturbing material, raising questions about psychological harm and responsibility.
 ```
